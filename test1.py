@@ -1,2 +1,3 @@
 def test1():
-	print('lalalalalla')
+	a = 123
+	print(a)
