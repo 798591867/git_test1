@@ -18,7 +18,7 @@ class PassportManger(models.Manager):
     # TODO 根据账户信息查找密码
     def get_one_passport(self, username, password):
         try:
-            passport = self.get(username=username, password=password)
+            passport = self.get(username=username, password=get_hash(password))
         except self.model.DoesNotExist:
             # TODO 账户不存在
             passport = None
@@ -27,7 +27,7 @@ class PassportManger(models.Manager):
 
 class Passport(BaseModel):
     # 用户模型类
-    username = models.CharField(max_length=20, verbose_name='用户名')
+    username = models.CharField(max_length=20, unique=True, verbose_name='用户名')
     password = models.CharField(max_length=40, verbose_name='用户密码')
     email = models.EmailField(verbose_name='用户邮箱')
     is_active = models.BooleanField(default=False, verbose_name='激活状态')

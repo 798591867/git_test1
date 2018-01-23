@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'books',
+    'tinymce',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -104,3 +106,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
+# TODO 富文本编辑器样式
+# 在这里编辑的是admin里面的富文本编辑器的样式
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'advanced',
+    'width': 600,
+    'height': 400,
+}
+
+# todo 后台上传的多媒体文件保存的位置
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
