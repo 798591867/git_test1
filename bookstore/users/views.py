@@ -9,6 +9,7 @@ from django.http import HttpResponse, JsonResponse
 
 
 def register(request):
+
     return render(request, 'users/register.html')
 
 
@@ -37,7 +38,7 @@ def register_handle(request):
 # todo 显示登录界面
 def login(request):
     """显示登录界面"""
-    username = ''
+    username = request.COOKIES.get('username', '')
     checked = ''
     context = {
         'username': username,

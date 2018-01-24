@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -118,3 +119,11 @@ TINYMCE_DEFAULT_CONFIG = {
 
 # todo 后台上传的多媒体文件保存的位置
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+#配置suit
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+)

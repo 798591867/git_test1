@@ -1,52 +1,10 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>尚硅谷书城-商品详情</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css'%}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css'%}">
-	
-	<script type="text/javascript" src=" {% static 'js/slide.js' %} "></script>
-
-</head>
+{% block title  %}
+尚硅谷书城-商品详情
+{% endblock title%}
 <body>
-	<div class="header_con">
-		<div class="header">
-			<div class="welcome fl">欢迎来到尚硅谷!</div>
-			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
-				<div class="login_btn fl">
-					<a href="login.html">登录</a>
-					<span>|</span>
-					<a href="register.html">注册</a>
-				</div>
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
-					<span>|</span>
-					<a href="cart.html">我的购物车</a>
-					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
-				</div>
-			</div>
-		</div>		
-	</div>
-
-	<div class="search_bar clearfix">
-		<a href="index.html" class="logo fl"><img src="static/images/logo.png" style="width: 160px; height: 53px;"></a>
-		<div class="search_con fl">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>
-		<div class="guest_cart fr">
-			<a href="cart.html" class="cart_name fl">我的购物车</a>
-			<div class="book_count fl" id="show_count">1</div>
-		</div>
-	</div>
-
+{% block body %}
 	<div class="navbar_con">
 		<div class="navbar clearfix">
 			<div class="subnav_con fl">
@@ -80,19 +38,13 @@
 	</div>
 
 	<div class="book_detail_con clearfix">
-		<div class="book_detail_pic fl"><img src="static/images/book_detail.jpg"></div>
+		<div class="book_detail_pic fl"><img style="width: 350px; height: 350px" src="{% static books.image %}"></div>
 
 		<div class="book_detail_list fr">
-			<!-- <h3>计算机程序设计艺术</h3>
-			<p>《计算机程序设计艺术》系列是公认的计算机科学领域经典之作，深入阐述了程序设计理论，对计算机领域的发展有着极为深远的影响。本书是该系列的第 1 卷，讲解基本算法，其中包含了其他各卷都需用到的基本内容。本卷从基本概念开始，然后讲述信息结构，并辅以大量的习题及答案。</p>
-			<div class="prize_bar">
-				<span class="show_pirze">¥<em>100</em></span>
-				<span class="show_unit">单  位：册</span>
-			</div> -->
 			<h3>{{ books.name }}</h3>
 			<p>{{ books.desc }}</p>
 			<div class="prize_bar">
-				<span class="show_pirze">￥<em>{{ books.price }}</span>
+                <span class="show_pirze">￥<em> {{ books.price }} </em> </span>
 				<span class="show_unit">单 位:{{ books.unit }}</span>
 			</div>
 			<div class="book_num clearfix">
@@ -116,16 +68,13 @@
 			<div class="new_book">
 				<h3>新品推荐</h3>
 				<ul>
+					{% for book in books_li %}
 					<li>
-						<a href="#"><img src="{% static 'images/book/book001.jpg' %}"></a>
-						<h4><a href="#">Python核心编程</a></h4>
-						<div class="prize">￥3.90</div>
+						<a href="{% url 'book:book_detail' books_id=books.id %}"> <img src="{% static book.image %}"></a>
+						<h4><a href="{% url 'book:book_detail' books_id=books.id %}">{{book.name}} </a></h4>
+						<div class="prize">￥{{ book.price }}</div>
 					</li>
-					<li>
-						<a href="#"><img src="static/images/book/book002.jpg"></a>
-						<h4><a href="#">Python学习手册</a></h4>
-						<div class="prize">￥16.80</div>
-					</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
@@ -139,30 +88,16 @@
 			<div class="tab_content">
 				<dl>
 					<dt>商品详情：</dt>
-					<dd>《计算机程序设计艺术》系列是公认的计算机科学领域经典之作，深入阐述了程序设计理论，对计算机领域的发展有着极为深远的影响。本书是该系列的第 1 卷，讲解基本算法，其中包含了其他各卷都需用到的基本内容。本卷从基本概念开始，然后讲述信息结构，并辅以大量的习题及答案。 </dd>
+					<dd>{{ books.detail | safe }}</dd>
 				</dl>
 			</div>
 
 		</div>
 	</div>
 
-	<div class="footer">
-		<div class="foot_link">
-			<a href="#">关于我们</a>
-			<span>|</span>
-			<a href="#">联系我们</a>
-			<span>|</span>
-			<a href="#">招聘人才</a>
-			<span>|</span>
-			<a href="#">友情链接</a>		
-		</div>
-		<p>CopyRight © 2016 北京尚硅谷信息技术有限公司 All Rights Reserved</p>
-		<p>电话：010-****888    京ICP备*******8号</p>
-	</div>
-	<div class="add_jump"></div>
-
-	<!-- <script type="text/javascript" src="js/jquery-1.12.4.js"></script> -->
-	<script type="text/javascript" src=" {% static 'js/jquery-1.12.4.min.js' %} "></script>
+<div class="add_jump"></div>
+{% endblock body %}
+{% block bottomfiles %}
 	<script>
 		var $add_x = $('#add_cart').offset().top;
 		var $add_y = $('#add_cart').offset().left;
@@ -183,6 +118,6 @@
 			});
 		})
 	</script>
-	
+{% endblock bottomfiles %}
 </body>
 </html>

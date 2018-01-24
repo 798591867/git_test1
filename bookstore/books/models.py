@@ -53,6 +53,21 @@ class Books(BaseModel):
     image = models.ImageField(upload_to='books', verbose_name='商品图片')
     status = models.SmallIntegerField(default=ONLINE, choices=status_choices, verbose_name='商品状态')
 
+
+# for i in range(100):
+#     book = Books()
+#     book.name='python大法好'+str(i)
+#     book.desc = 'python大法好,好啊真是好'
+#     book.price = 100+i
+#     book.unite = '本'
+#     book.stock = i*100
+#     book.sales = i*200
+#     book.detail = 'python大法好,好啊真是好'*i
+#     book.image = 'books/book00%d.jpg' % (i+1)
+#     book.save()
+
+
+
     objects = BooksManager()
 
     class Meta:
