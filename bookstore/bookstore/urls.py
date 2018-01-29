@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 import users
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^user/', include('users.urls', namespace='user')),
     url(r'^book/', include('books.urls', namespace='book')),
     url(r'^tinymce/', include('tinymce.urls', namespace='tinymce')),
+    url(r'^cart/', include('cart.urls', namespace='cart')),  # 购物车模块
+    url(r'^order/', include('order.urls', namespace='order')),  # 订单模块
+    url(r'^search/', include('haystack.urls')),
 ]

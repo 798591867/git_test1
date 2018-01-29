@@ -8,7 +8,7 @@
 		<div class="navbar">
 			<h1 class="fl">全部商品分类</h1>
 			<ul class="navlist fl">
-				<li><a href="">首页</a></li>
+				<li><a href="{% url 'book:book_index' %}">首页</a></li>
 				<li class="interval">|</li>
 				<li><a href="">移动端书城</a></li>
 				<li class="interval">|</li>
@@ -60,26 +60,14 @@
 		<div class="book_con clearfix">
 			<div class="book_banner fl"><img src="/static/images/banner01.jpg"></div>
 			<ul class="book_list fl">
-				<li>
-					<h4><a href="#">Python核心编程</a></h4>
-					<a href="#"><img src="/static/images/book/book001.jpg"></a>
-					<div class="prize">¥ 30.00</div>
-				</li>
-				<li>
-					<h4><a href="#">Python学习手册</a></h4>
-					<a href="#"><img src="/static/images/book/book002.jpg"></a>
-					<div class="prize">¥ 5.50</div>
-				</li>
-				<li>
-					<h4><a href="#">Python Cookbook</a></h4>
-					<a href="#"><img src="/static/images/book/book003.jpg"></a>
-					<div class="prize">¥ 3.90</div>
-				</li>
-				<li>
-					<h4><a href="#">Python高性能编程</a></h4>
-					<a href="#"><img src="/static/images/book/book004.jpg"></a>
-					<div class="prize">¥ 25.80</div>
-				</li>
+				{% for book in python_hot %}
+                <li>
+                    <h4><a href="{% url 'book:book_detail' books_id=book.id  %}">{{ book.name }}</a></h4>
+                    <a href="{% url 'book:book_detail' books_id=book.id  %}"><img src="{% static book.image %}"></a>
+                    <div class="prize">¥ {{ book.price }}</div>
+                </li>
+                {% endfor %}
+				
 			</ul>
 		</div>
 	</div>

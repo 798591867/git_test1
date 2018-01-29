@@ -10,6 +10,56 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/slide.js' %}"></script>
+    {% block cart_count %}
+    <script>
+        $.get('/cart/count/', function(data){
+            //{'res':商品的总数}
+            $('#show_count').html(data.res)
+        })
+    </script>
+    {% endblock cart_count %}
+    <script>
+        var $add_x = $('#add_cart').offset().top;
+        var $add_y = $('#add_cart').offset().left;
+
+        var $to_x = $('#show_count').offset().top;
+        var $to_y = $('#show_count').offset().left;
+
+        $('#add_cart').click(function(){
+            //获取商品的id和商品的数量
+            books_id = $(this).attr('books_id');
+            books_count = $('.num_show').val();
+            csrf = $("input[name='csrfmiddlewaretoken']").val();
+            //发起请求, 访问/cart/add/,进行购物车数据的添加
+            params = {
+                'books_id':books_id,
+                'books_count': books_count,
+                'csrfmiddlewaretoken':csrf,
+            };
+
+            $.post('/cart/add/', params, function(data){
+                if (data.res === 5){
+                    //添加成功
+                    $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+                    $(".add_jump").stop().animate({
+                        'left':$to_y+7,
+                        'top':$to_x+7},
+                        "fast",function(){
+                            $(".add_jump").fadeOut('fast',function(){
+                                // 获取原有的show_count的值
+                                count = $('#show_count').html();
+                                count = parseInt(count) + parseInt(books_count);
+                                $('#show_count').html(count);
+                            });
+                        });
+                }
+                else{
+                    //添加失败
+                    alert(data.errmsg)
+                }
+            })
+        })
+    </script>
     {# 网页顶部引入文件块 #}
     {% block topfiles %}
     {% endblock topfiles %}
@@ -19,7 +69,7 @@
 {% block header_con %}
     <div class="header_con">
         <div class="header">
-            <div class="welcome fl">欢迎来到尚硅谷书店!</div>
+            <div class="welcome fl">欢迎来到尚硅谷书店</div>
             <div class="fr">
                 {% if request.session.islogin %}
                 <div class="login_btn fl">
@@ -36,9 +86,9 @@
                 {% endif %}
                 <div class="user_link fl">
                     <span>|</span>
-                    <a href="#">用户中心</a>
+                    <a href="{% url 'user:info_center' %}">用户中心</a>
                     <span>|</span>
-                    <a href="#">我的购物车</a>
+                    <a href="{% url 'cart:show' %}">我的购物车</a>
                     <span>|</span>
                     <a href="#">我的订单</a>
                 </div>
@@ -51,11 +101,17 @@
     <div class="search_bar clearfix">
         <a href="{% url 'book:book_index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
         <div class="search_con fl">
-            <input type="text" class="input_text fl" name="" placeholder="搜索商品">
-            <input type="button" class="input_btn fr" name="" value="搜索">
+            <form method='get' action="/search/" target="_blank">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+{#                <input type="text" name="q">#}
+{#                <input type="submit" value="查询">#}
+            </form>
+{#            <input type="text" class="input_text fl" name="" placeholder="搜索商品">#}
+{#            <input type="button" class="input_btn fr" name="" value="搜索">#}
         </div>
         <div class="guest_cart fr">
-            <a href="#" class="cart_name fl">我的购物车</a>
+            <a href="{% url 'cart:show' %}" class="cart_name fl">我的购物车</a>
             <div class="book_count fl" id="show_count">0</div>
         </div>
     </div>
