@@ -3,8 +3,8 @@ from books.models import Books
 from books.enums import *
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
-from django.views.decorators.cache import cache_page
-
+# from django.views.decorators.cache import cache_page
+from django_redis import get_redis_connection
 
 # Create your views here.
 
@@ -57,6 +57,17 @@ def detail(request, books_id):
     # 新品推荐
     books_li = Books.objects.get_books_by_type(type_id=books.type_id, limit=2, sort='new')
 
+    # 用户登录之后,才记录浏览记录
+    # 每个用户浏览记录对应redis中的一条信息 格式:'history_用户id:[10,9,2,3,4]
+    # [9,10,2,3,4]
+    if request.session.has_key('islogin'):
+        # 用户已经登录, 记录浏览记录
+        conn = get_redis_connection('default')
+        key = 'history_%d' % request.session.get('passport_id')
+        # 先从redis列表里一处books.id
+        conn.lrem(key, 0, books.id)
+        conn.lpush(key, books.id)
+        # 保存用户最近浏览的5个商品
     # 定义上下文
     context = {'books': books, 'books_li': books_li}
 
